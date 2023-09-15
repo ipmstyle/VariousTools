@@ -26,4 +26,3 @@ if __name__ == "__main__":
 
     # 'D' 폴더에 'D'가 들어간 파일을 분류
     classify_files_by_keyword("D", "D")
-

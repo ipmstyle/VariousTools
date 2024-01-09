@@ -9,6 +9,7 @@ from datetime import datetime
 
 from minio import Minio
 from minio.error import InvalidResponseError
+from minio.commonconfig import Tags
 
 
 def get_current_time():
@@ -19,21 +20,35 @@ def get_current_time():
 
 def upload_minio(minio_client, bucket_name, object_name, data, tags=None):
     try:
-        minio_client.put_object(bucket_name, object_name, data, len(data.getvalue()))
+        # minio_client.put_object(bucket_name, object_name, data, len(data.getvalue()))
+        minio_client.put_object(
+                bucket_name, object_name, data, len(data.getvalue()), 
+                content_type="image/jpg", 
+                metadata={"project": "snct"},
+                tags=tags)
     except InvalidResponseError as err:
         print(f"Error: {err}")
 
 def put_image(object_bytesIO):
-    minio_server = <IP>
-    minio_access_key = <ACCESS KEY?
+    minio_server = <IP:PORT>
+    minio_access_key = <ACCESS KEY>
     minio_secret_key = <SECRET KEY>
-    minio_bucket_name = <Minio BUCKET>
+    minio_bucket_name = <BUCKET>
     minio_object_name = get_current_time()
 
-    minio_tags = {
-        'location': 'ohkyung',
-        'device': 'webcam'
-    }
+    minio_tags = Tags(for_object=True)
+    minio_tags['location'] = 'GURO'
+    minio_tags['site'] = 'ohkyung'
+    minio_tags['area'] = 'tech-lab'
+    minio_tags['zone'] = 'test server display'
+    minio_tags['device'] = 'webcam'
+    # minio_tags = {
+    #     'location': 'GURO',
+    #     'site': 'ohkyung',
+    #     'area': 'tech-lab',
+    #     'zone': 'test server display',
+    #     'device': 'webcam'
+    # }
 
     minio_client = Minio(minio_server,
         access_key=minio_access_key,

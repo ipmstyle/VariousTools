@@ -24,10 +24,10 @@ def upload_minio(minio_client, bucket_name, object_name, data, tags=None):
         print(f"Error: {err}")
 
 def put_image(object_bytesIO):
-    minio_server = '125.7.128.33:9101'
-    minio_access_key = 'X8y8Fs2XkhW9HbmNlaNg'
-    minio_secret_key = 'WOi1okr4lOttWi76hza2Ub47PilMJ66Y4iwlDc2h'
-    minio_bucket_name = 'snct-data'
+    minio_server = <IP>
+    minio_access_key = <ACCESS KEY?
+    minio_secret_key = <SECRET KEY>
+    minio_bucket_name = <Minio BUCKET>
     minio_object_name = get_current_time()
 
     minio_tags = {

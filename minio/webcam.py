@@ -21,11 +21,12 @@ def get_current_time():
 def upload_minio(minio_client, bucket_name, object_name, data, tags=None):
     try:
         # minio_client.put_object(bucket_name, object_name, data, len(data.getvalue()))
-        minio_client.put_object(
-                bucket_name, object_name, data, len(data.getvalue()), 
-                content_type="image/jpg", 
-                metadata={"project": "snct"},
-                tags=tags)
+        result = minio_client.put_object(
+                                    bucket_name, object_name, data, len(data.getvalue()), 
+                                    content_type="image/jpg", 
+                                    metadata={"project": "snct"},
+                                    tags=tags)
+        return result
     except InvalidResponseError as err:
         print(f"Error: {err}")
 
@@ -35,6 +36,8 @@ def put_image(object_bytesIO):
     minio_secret_key = <SECRET KEY>
     minio_bucket_name = <BUCKET>
     minio_object_name = get_current_time()
+
+    minio_object_path = '/2024/tech-lab/'
 
     minio_tags = Tags(for_object=True)
     minio_tags['location'] = 'GURO'
@@ -56,7 +59,12 @@ def put_image(object_bytesIO):
         secure=False
     )
 
-    upload_minio(minio_client, minio_bucket_name, minio_object_name, object_bytesIO, tags=minio_tags)
+    result = upload_minio(minio_client, minio_bucket_name, minio_object_path+minio_object_name, object_bytesIO, tags=minio_tags)
+    print(
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
+)
 
 
 def get_image(camera_index=0):
@@ -89,6 +97,7 @@ def main():
 
 if __name__ == "__main__":
     schedule.every(1).minutes.do(main)
+    # schedule.every(1).seconds.do(main)
 
     while True:
         schedule.run_pending()

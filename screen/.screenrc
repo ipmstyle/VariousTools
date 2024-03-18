@@ -1,0 +1,15 @@
+screen -S pms -dmS
+
+screen -S pms -X screen -t htop htop
+
+screen -S pms -X screen -t minio 
+screen -S pms -p minio -X stuff "cd ~/minio"
+
+screen -S pms -X screen -t cvat
+screen -S pms -p cvat -X stuff "cd ~/cvat"
+
+screen -S pms -X screen -t mosquitto
+screen -S pms -p mosquitto -X stuff "cd ~/mosquitto"
+
+screen -S pms -X screen -t snct_mBot
+screen -S pms -p snct_mBot -X stuff "cd ~/telegram-bot"

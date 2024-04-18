@@ -1,0 +1,5 @@
+imageio==2.34.0
+minio==7.2.3
+mysql-connector==2.2.9
+pandas==2.2.1
+python-dotenv==1.0.1

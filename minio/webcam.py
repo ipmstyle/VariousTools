@@ -13,9 +13,17 @@ from minio.commonconfig import Tags
 
 from DatabaseManager import DatabaseManager
 from webcam_logger import Logger
+from dotenv import load_dotenv
 
 
 logger = Logger()
+
+load_dotenv()
+MINIO_HOST = os.getenv("MINIO_HOST", default=None)
+MINIO_PORT = os.getenv("MINIO_PORT", default=None)
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", default=None)
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", default=None)
+MINIO_BUCKET = os.getenv("MINIO_BUCKET", default=None)
 
 def get_current_time():
     datetime_str = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -29,18 +37,18 @@ def insert_DB(data, now_datetime):
 
     conn = DatabaseManager()
 
-    query = f"""INSERT INTO job_mst (
-                    detect_dt, detect_time, detect_datetime
-                ) VALUES (
-                    '{now_date}', '{now_time}', '{now_datetime}'
-                );"""
+    query = f"""INSERT INTO job_mst 
+                (detect_dt, detect_time, detect_datetime)
+                VALUES 
+                ('{now_date}', '{now_time}', '{now_datetime}');
+                """
     conn.execute_query(query)
 
-    query = f"""INSERT INTO job_det (
-                    detect_dt, detect_time, img_seq, img_nm, detect_datetime
-                ) VALUES (
-                    '{now_date}', '{now_time}', 1, '{data.object_name}', '{now_datetime}'
-                );"""
+    query = f"""INSERT INTO job_det 
+                (detect_dt, detect_time, img_seq, img_nm, detect_datetime)
+                VALUES 
+                ('{now_date}', '{now_time}', 1, '{data.object_name}', '{now_datetime}');
+                """
     conn.execute_query(query)
 
     conn.disconnect()
@@ -71,10 +79,10 @@ def put_object(object_bytesIO):
     object_month = now_date[4:6]
     object_day = now_date[6:8]
 
-    minio_server = '125.7.128.33:9101'
-    minio_access_key = 'wCfC4WyUmThpuaWlEevH'
-    minio_secret_key = 'krDNbreeiNdqoYwiRIzvllVqFGXJm7kpBz1eImDj'
-    minio_bucket_name = 'snct-data'
+    minio_server = f'{MINIO_HOST}:{MINIO_PORT}'
+    minio_access_key = MINIO_ACCESS_KEY
+    minio_secret_key = MINIO_SECRET_KEY
+    minio_bucket_name = MINIO_BUCKET
     minio_object_name = f'{now_datetime}.jpg'
 
     minio_object_path = f'/tech-lab/{object_year}/{object_month}/{object_day}/'
@@ -106,10 +114,10 @@ def put_object(object_bytesIO):
 
 
 def get_object_info(info):
-    minio_server = '125.7.128.33:9101'
-    minio_access_key = 'wCfC4WyUmThpuaWlEevH'
-    minio_secret_key = 'krDNbreeiNdqoYwiRIzvllVqFGXJm7kpBz1eImDj'
-    minio_bucket_name = 'snct-data'
+    minio_server = f'{MINIO_HOST}:{MINIO_PORT}'
+    minio_access_key = MINIO_ACCESS_KEY
+    minio_secret_key = MINIO_SECRET_KEY
+    minio_bucket_name = MINIO_BUCKET
 
     minio_client = Minio(minio_server,
         access_key=minio_access_key,

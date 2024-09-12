@@ -1,0 +1,14 @@
+[Unit]
+Description=Fan Control Script
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ruby /usr/local/bin/fanctrl.rb
+Restart=always
+User=tinyos
+WorkingDirectory=/usr/local/bin
+
+[Install]
+WantedBy=multi-user.target
+
